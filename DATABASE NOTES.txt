@@ -1,0 +1,38 @@
+- MENU -
+1. Add more options
+2. Condense existing options into general "types"
+3. Make UI Nicer (Vague)
+
+- SALES -
+1. Integrate the sales table and relational tables into the JDBC program
+2. Potential update to invoice section may be needed
+
+- INCHARGE -
+1. Integrate
+
+- CONTAINS -
+1. Integrate
+
+- APPLICABLE -
+1. Integrate
+
+NOTES/FORMATTING: 
+1.
+ONLY THE DRIVER SHOULD TAKE USER INPUT	
+ONLY THE DRIVER SHOULD PRINT
+THUS, IF YOU NEED INPUT. USE A WRAPPER CLASS IN THE DRIVER WITH THE SAME NAME AS THE METHOD
+
+2.
+ALL WRAPPERS START WITH THE PRINTLN (--- *BLANK* ---)
+
+3.
+IF A CHANGE IS MADE TO THE DATABASE PRINTLN(-> *CHANGE*)
+
+4.
+MAKE USE OF THE INVALIDARGUMENTS & INVALIDACCESS EXCEPTIONS
+
+5. 
+EVERY COMMAND ADDED MUST ALSO BE ADDED TO COMMANDPARSE
+*SUBJECT TO CHANGE*
+
+6.
