@@ -506,7 +506,7 @@ public class CommandRunner
 
             Statement stmt = con.createStatement();
 
-            String command = "SELECT * FROM Invoices;";
+            String command = "SELECT * FROM Invoices NATURAL JOIN inCharge natural JOIN Contain;";
             ResultSet rs = stmt.executeQuery(command);
 
             while (rs.next())
@@ -519,6 +519,8 @@ public class CommandRunner
                         + String.format(" | %-5.2f ", rs.getDouble("Amount_Due"))
                         + String.format(" | %-5.2f ", rs.getDouble("Change"))
                         + String.format(" | %s ", rs.getString("Date_Bought"))
+                        + String.format(" | %-5.2f ", rs.getDouble("id"))
+                        + String.format(" | %-5.2f ", rs.getDouble("product_no"))
                         + "\n";
             }
 
@@ -545,7 +547,7 @@ public class CommandRunner
 
     }
 
-    public static void addInvoice(double subTot, double total, double due, double given, double change, String date)
+    public static void addInvoice(double subTot, double total, double due, double given, double change, String date, double emp_id, double prod_no)
     {
         Connection con = null;
         try
@@ -564,6 +566,12 @@ public class CommandRunner
             }
 
             String command = String.format("INSERT INTO Invoices values (%d,%f,%f,%f,%f,%f,'%s');", InvNum, subTot, total, due, given, change,date);
+            stmt.executeUpdate(command);
+            
+            command = String.format("INSERT INTO inCharge values (%f, %d);", emp_id, InvNum);
+            stmt.executeUpdate(command);
+            
+            command = String.format("INSERT INTO Contain values (%f, %d);", prod_no, InvNum);
             stmt.executeUpdate(command);
         }
         catch (Exception e)
@@ -598,6 +606,12 @@ public class CommandRunner
 
             String command = String.format("DELETE FROM Invoices WHERE Invoice_No=%d;", InvID);
             stmt.executeUpdate(command);
+            
+            command = String.format("DELETE FROM inCharge WHERE Invoice_No=%d;", InvID);
+            stmt.executeUpdate(command);
+            
+            command = String.format("DELETE FROM Contain WHERE Invoice_No=%d;", InvID);
+            stmt.executeUpdate(command);
         }
         catch (Exception e)
         {
@@ -615,6 +629,59 @@ public class CommandRunner
             {
                 e.printStackTrace();
             }
+        }
+    }
+    
+    public static String showInvoiceByID(int empID)
+    {
+        String line = "";
+        Connection con = null;
+
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = String.format("SELECT * FROM Invoices NATURAL JOIN inCharge natural JOIN Contain WHERE id=%d;", empID);
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("Invoice_No"))
+                        + String.format(" | %-5.2f", rs.getDouble("SubTotal"))
+                        + String.format(" | %-5.2f ", rs.getDouble("Total"))
+                        + String.format(" | %-5.2f ", rs.getDouble("Amount_Given"))
+                        + String.format(" | %-5.2f ", rs.getDouble("Amount_Due"))
+                        + String.format(" | %-5.2f ", rs.getDouble("Change"))
+                        + String.format(" | %s ", rs.getString("Date_Bought"))
+                        + String.format(" | %-5.2f ", rs.getDouble("id"))
+                        + String.format(" | %-5.2f ", rs.getDouble("product_no"))
+                        + "\n";
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
         }
     }
 
