@@ -48,6 +48,9 @@ public class CommandParse
             return true;
         else if (command.equals("!REMOVE_INVOICE"))
             return true;
+        else if (command.equals("!SHOW_INVOICES_BY_EMPLOYEE"))
+            return true;
+
 
         else if (command.equals("!ADD_ORDER"))
             return true;
