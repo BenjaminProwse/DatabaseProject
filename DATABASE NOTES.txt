@@ -8,13 +8,13 @@
 2. Potential update to invoice section may be needed
 
 - INCHARGE -
-1. Integrate
+1. Integrate - Done ver 1.1 Manuel
 
 - CONTAINS -
-1. Integrate
+1. Integrate - Done ver 1.1 Manuel
 
 - APPLICABLE -
-1. Integrate
+1. Integrate 
 
 NOTES/FORMATTING: 
 1.
@@ -35,4 +35,6 @@ MAKE USE OF THE INVALIDARGUMENTS & INVALIDACCESS EXCEPTIONS
 EVERY COMMAND ADDED MUST ALSO BE ADDED TO COMMANDPARSE
 *SUBJECT TO CHANGE*
 
-6.
+Ver 1.1
+Added incharge and contains to the invoices show and added an option to show invoices
+by employee id. 
