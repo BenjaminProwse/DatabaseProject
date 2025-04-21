@@ -453,7 +453,7 @@ public class CommandRunner
         }
     }
 
-    public static void addFlavor(String name, String rescrictions, int cals)
+    public static void addFlavor(String name, String rescrictions, int cals, double pricePerScope)
     {
         Connection con = null;
         try
@@ -471,7 +471,7 @@ public class CommandRunner
                 proNum = rs.getInt(1) + 1;
             }
 
-            String command = String.format("INSERT INTO IceCreamFlavor values (%d,'%s','%s',%d);", proNum, name, rescrictions, cals);
+            String command = String.format("INSERT INTO IceCreamFlavor values (%d,'%s','%s',%d,%f);", proNum, name, rescrictions, cals,pricePerScope);
             stmt.executeUpdate(command);
         }
         catch (Exception e)
@@ -516,7 +516,6 @@ public class CommandRunner
                         + String.format(" | %-5.2f", rs.getDouble("SubTotal"))
                         + String.format(" | %-5.2f ", rs.getDouble("Total"))
                         + String.format(" | %-5.2f ", rs.getDouble("Amount_Given"))
-                        + String.format(" | %-5.2f ", rs.getDouble("Amount_Due"))
                         + String.format(" | %-5.2f ", rs.getDouble("Change"))
                         + String.format(" | %s ", rs.getString("Date_Bought"))
                         + String.format(" | %-5.2f ", rs.getDouble("id"))
@@ -547,7 +546,7 @@ public class CommandRunner
 
     }
 
-    public static void addInvoice(double subTot, double total, double due, double given, double change, String date, double emp_id, double prod_no)
+    public static void addInvoice(double subTot, double total, double given, double change, String date, int emp_id, ArrayList<Integer> prod_nos, ArrayList<Integer> scopes)
     {
         Connection con = null;
         try
@@ -565,14 +564,17 @@ public class CommandRunner
                 InvNum = rs.getInt(1) + 1;
             }
 
-            String command = String.format("INSERT INTO Invoices values (%d,%f,%f,%f,%f,%f,'%s');", InvNum, subTot, total, due, given, change,date);
+            String command = String.format("INSERT INTO Invoices values (%d,%f,%f,%f,%f,'%s');", InvNum, subTot, total, given, change,date);
             stmt.executeUpdate(command);
             
-            command = String.format("INSERT INTO inCharge values (%f, %d);", emp_id, InvNum);
+            command = String.format("INSERT INTO inCharge values (%d, %d);", emp_id, InvNum);
             stmt.executeUpdate(command);
-            
-            command = String.format("INSERT INTO Contain values (%f, %d);", prod_no, InvNum);
-            stmt.executeUpdate(command);
+
+            for (int i = 0; i < prod_nos.size(); i++)
+            {
+                command = String.format("INSERT INTO Contain values (%d, %d, %d);", prod_nos.get(i),InvNum, scopes.get(i));
+                stmt.executeUpdate(command);
+            }
         }
         catch (Exception e)
         {
@@ -645,7 +647,7 @@ public class CommandRunner
 
             Statement stmt = con.createStatement();
 
-            String command = String.format("SELECT * FROM Invoices NATURAL JOIN inCharge natural JOIN Contain WHERE id=%d;", empID);
+            String command = String.format("SELECT * FROM Invoices NATURAL JOIN inCharge WHERE id=%d;", empID);
             ResultSet rs = stmt.executeQuery(command);
 
             while (rs.next())
@@ -655,14 +657,55 @@ public class CommandRunner
                         + String.format(" | %-5.2f", rs.getDouble("SubTotal"))
                         + String.format(" | %-5.2f ", rs.getDouble("Total"))
                         + String.format(" | %-5.2f ", rs.getDouble("Amount_Given"))
-                        + String.format(" | %-5.2f ", rs.getDouble("Amount_Due"))
                         + String.format(" | %-5.2f ", rs.getDouble("Change"))
                         + String.format(" | %s ", rs.getString("Date_Bought"))
-                        + String.format(" | %-5.2f ", rs.getDouble("id"))
-                        + String.format(" | %-5.2f ", rs.getDouble("product_no"))
                         + "\n";
             }
 
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
+
+    public static String showInvoiceContents(int invNum)
+    {
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = String.format("SELECT * FROM Contain where invoice_no = %d;", invNum);
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("product_no"))
+                        + String.format(" | %-5.2f", rs.getDouble("scopes"))
+                        + "\n";
+            }
         }
         catch (Exception e)
         {

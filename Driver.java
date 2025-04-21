@@ -1,4 +1,6 @@
-import java.sql.SQLException;
+import java.sql.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -243,9 +245,16 @@ public class Driver
                                 {
                                     if (Validator.validAccess(ID,"!SHOW_INVOICES_BY_EMPLOYEE"))
                                     {
-                                        System.out.println("Enter employee ID: ");    
-                                        int empID = input.nextInt();
-                                        System.out.println(CommandRunner.showInvoiceByID(empID));
+                                        showInvoicesByEmployee();
+                                    }
+                                    else
+                                        throw new InvalidAccessException("Invalid Access");
+                                }
+                                else if (command.equals("!SHOW_INVOICE_CONTENTS"))
+                                {
+                                    if (Validator.validAccess(ID,"!SHOW_INVOICE_CONTENTS"))
+                                    {
+                                        showInvoiceContents();
                                     }
                                     else
                                         throw new InvalidAccessException("Invalid Access");
@@ -406,8 +415,10 @@ public class Driver
         String restrictions = input.nextLine();
         System.out.print("Calories: ");
         int calories = input.nextInt();
+        System.out.print("Price per Scope: ");
+        double pricePerScope = input.nextDouble();
 
-        CommandRunner.addFlavor(name, restrictions, calories);
+        CommandRunner.addFlavor(name, restrictions, calories,pricePerScope);
     }
 
     private static void addInvoice()
@@ -415,23 +426,93 @@ public class Driver
         Scanner input = new Scanner(System.in);
         System.out.println("--- Add Invoice ---");
         System.out.print("Employee ID: ");
-        double emp_id = input.nextDouble();
-        System.out.print("Flavor ID: ");
-        double prod_no = input.nextDouble();
-        System.out.print("SubTotal: ");
-        double subTotal = input.nextDouble();
-        System.out.print("Total: ");
-        double total = input.nextDouble();
-        System.out.print("Amount Due: ");
-        double amount = input.nextDouble();
+        int emp_id = input.nextInt();
+
+        System.out.print("How many cones: ");
+        int cones = input.nextInt();
+
+        ArrayList <Integer> prod_nos = new ArrayList<>();
+        ArrayList <Integer> scopes = new ArrayList<>();
+
+
+        for (int i = 0; i < cones; i++)
+        {
+            System.out.print("Flavor ID: ");
+            int prod_no = input.nextInt();
+
+            System.out.print("Scopes: ");
+            int scope = input.nextInt();
+
+            prod_nos.add(prod_no);
+            scopes.add(scope);
+        }
+
+        double subTotal = 0;
+        double total = 0;
+        Connection con = null;
+
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = "SELECT * FROM IceCreamFlavor;";
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                for (int i = 0; i < prod_nos.size(); i++)
+                {
+                    if (prod_nos.get(i) == rs.getInt("Product_No"))
+                    {
+                        double price = rs.getDouble("Price");
+                        subTotal = subTotal + price * scopes.get(i);
+                    }
+                }
+            }
+            System.out.println("SubTotal: "+subTotal);
+            total = Math.round(subTotal * 1.15);
+            System.out.println("Total Price: "+total);
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+
         System.out.print("Amount Given: ");
         double giveAmount = input.nextDouble();
-        System.out.print("Change: ");
-        double change = input.nextDouble();
-        System.out.print("Date (DD//MM//YY): ");
-        String date = input.nextLine();
+        input.nextLine();
 
-        CommandRunner.addInvoice(subTotal, total, amount, giveAmount, change, date, emp_id, prod_no);
+        double change = total - giveAmount;
+        System.out.println("Change: "+change);
+
+        LocalDateTime today = LocalDateTime.now();
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yy");
+
+        String date = formatter.format(today);
+
+        System.out.println("Date (DD//MM//YY): "+date);
+
+        CommandRunner.addInvoice(subTotal, total, giveAmount, change, date, emp_id, prod_nos,scopes);
     }
 
     private static void removeInvoice()
@@ -442,6 +523,25 @@ public class Driver
         int id = input.nextInt();
 
         CommandRunner.removeInvoice(id);
+    }
+
+    private static void showInvoicesByEmployee()
+    {
+        System.out.println("--- Show Invoice By Employee ---");
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter employee ID: ");
+        int empID = input.nextInt();
+        System.out.println(CommandRunner.showInvoiceByID(empID));
+        input.nextLine();
+    }
+
+    private static void showInvoiceContents()
+    {
+        System.out.println("--- Show Invoice Contents ---");
+        Scanner input = new Scanner(System.in);
+        System.out.print("Enter invoice ID: ");
+        int id = input.nextInt();
+        System.out.println(CommandRunner.showInvoiceContents(id));
     }
 
     //NOTE: THERE IS NO REMOVE ORDER. SET THE STAGE TO 'CANCELED' AND LEAVE DATE AT NULL

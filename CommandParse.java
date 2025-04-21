@@ -50,6 +50,8 @@ public class CommandParse
             return true;
         else if (command.equals("!SHOW_INVOICES_BY_EMPLOYEE"))
             return true;
+        else if (command.equals("!SHOW_INVOICE_CONTENTS"))
+            return true;
 
 
         else if (command.equals("!ADD_ORDER"))
