@@ -32,8 +32,6 @@ public class Driver
         }
 
         try {
-
-
             if (Validator.validateCredentials(username, password) == true)
             {
                 ID = Validator.getID(username, password);
@@ -241,6 +239,17 @@ public class Driver
                                     else
                                         throw new InvalidAccessException("Invalid Access");
                                 }
+                                else if (command.equals("!SHOW_INVOICES_BY_EMPLOYEE"))
+                                {
+                                    if (Validator.validAccess(ID,"!SHOW_INVOICES_BY_EMPLOYEE"))
+                                    {
+                                        System.out.println("Enter employee ID: ");    
+                                        int empID = input.nextInt();
+                                        System.out.println(CommandRunner.showInvoiceByID(empID));
+                                    }
+                                    else
+                                        throw new InvalidAccessException("Invalid Access");
+                                }
                             }
                             else
                             {
@@ -405,6 +414,10 @@ public class Driver
     {
         Scanner input = new Scanner(System.in);
         System.out.println("--- Add Invoice ---");
+        System.out.print("Employee ID: ");
+        double emp_id = input.nextDouble();
+        System.out.print("Flavor ID: ");
+        double prod_no = input.nextDouble();
         System.out.print("SubTotal: ");
         double subTotal = input.nextDouble();
         System.out.print("Total: ");
@@ -418,7 +431,7 @@ public class Driver
         System.out.print("Date (DD//MM//YY): ");
         String date = input.nextLine();
 
-        CommandRunner.addInvoice(subTotal, total, amount, giveAmount, change, date);
+        CommandRunner.addInvoice(subTotal, total, amount, giveAmount, change, date, emp_id, prod_no);
     }
 
     private static void removeInvoice()
