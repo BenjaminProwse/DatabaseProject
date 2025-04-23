@@ -66,14 +66,11 @@ public class Driver
                     }
 
                     if (CommandParse.isCommand(command) == true) {
-                        System.out.println("DEBUG: 1");
                         //COMMAND IS VALID
                         if (Validator.validAccess(Validator.getID(username, password), command)) {
-                            System.out.println("DEBUG: 2");
                             //ACCESS IS VALID
                             //RUN THE COMMAND
                             if (command.equals("!HELP")) {
-                                System.out.println("DEBUG: 3");
                                 System.out.println(CommandRunner.help());
                             }
 
@@ -278,9 +275,17 @@ public class Driver
                     }
                     else
                     {
-                        throw new InvalidArguementsException("'" + line + "' is an Invalid command");
+                        throw new InvalidArguementsException(line);
                     }
                 }
+            }
+            catch (InvalidArguementsException e)
+            {
+                System.out.println("'" + e.getMessage() + "' is an Invalid command");
+            }
+            catch (InvalidAccessException e)
+            {
+                System.out.println("Access denied.");
             }
             catch (Exception e)
             {

@@ -462,17 +462,23 @@ public class CommandRunner
 
             con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
 
-            Statement stmt = con.createStatement();
 
-            ResultSet rs = stmt.executeQuery("SELECT MAX(Product_No) FROM IceCreamFlavor;");
+            ResultSet rs = con.createStatement().executeQuery("SELECT MAX(Product_No) FROM IceCreamFlavor;");
             int proNum = 0;
             if (rs.next())
             {
                 proNum = rs.getInt(1) + 1;
             }
 
-            String command = String.format("INSERT INTO IceCreamFlavor values (%d,'%s','%s',%d,%f);", proNum, name, rescrictions, cals,pricePerScope);
-            stmt.executeUpdate(command);
+            
+            // Addressing issues when putting `'`s in names and potential locale issues
+            PreparedStatement stmt = con.prepareStatement("INSERT INTO IceCreamFlavor VALUES (?, ?, ?, ?, ?)");
+            stmt.setInt(1,proNum);
+            stmt.setString(2, name);
+            stmt.setString(3, rescrictions);
+            stmt.setInt(4, cals);
+            stmt.setDouble(5, pricePerScope);
+            stmt.executeUpdate();
         }
         catch (Exception e)
         {
