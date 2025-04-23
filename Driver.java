@@ -267,6 +267,22 @@ public class Driver
                                 else
                                     throw new InvalidAccessException("Invalid Access");
                             }
+
+                            else if (command.equals("!SHOW_STOCK"))
+                            {
+                                if (Validator.validAccess(ID,"!SHOW_STOCK"))
+                                    System.out.println(CommandRunner.showStock());
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
+
+                            else if (command.equals("!SHOW_STOCK_ALL"))
+                            {
+                                if (Validator.validAccess(ID,"!SHOW_STOCK_ALL"))
+                                    System.out.println(CommandRunner.showStockAll());
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
                         }
                         else
                         {
