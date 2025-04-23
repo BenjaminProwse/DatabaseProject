@@ -512,7 +512,7 @@ public class CommandRunner
 
             Statement stmt = con.createStatement();
 
-            String command = "SELECT * FROM Invoices NATURAL JOIN inCharge natural JOIN Contain;";
+            String command = "SELECT * FROM Invoices JOIN inCharge USING (Invoice_NO) JOIN Contain USING (Invoice_NO);";
             ResultSet rs = stmt.executeQuery(command);
 
             while (rs.next())
@@ -653,7 +653,7 @@ public class CommandRunner
 
             Statement stmt = con.createStatement();
 
-            String command = String.format("SELECT * FROM Invoices NATURAL JOIN inCharge WHERE id=%d;", empID);
+            String command = String.format("SELECT * FROM Invoices JOIN inCharge USING (Invoice_NO) WHERE id=%d;", empID);
             ResultSet rs = stmt.executeQuery(command);
 
             while (rs.next())
