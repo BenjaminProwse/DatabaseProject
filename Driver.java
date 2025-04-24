@@ -824,24 +824,24 @@ public class Driver
             System.out.println("-> Stock Updated");
     }
 
-    public static String showShipmentStage(int trackingID)
+    public static String showShipmentStage()
     {
         Scanner input = new Scanner(System.in);
         System.out.println("--- Request Shipment Stage ---");
-        int id = -1;
+        int trackingID = -1;
         do
         {
             try
             {
                 System.out.print("Shipment Number: ");
-                id = input.nextInt();
+                trackingID = input.nextInt();
             }
             catch (Exception e)
             {
                 System.out.println("Invalid input!");
-                id = -1;
+                trackingID = -1;
             }
-        } while (id == -1);
+        } while (trackingID == -1);
         
         String line = "";
         Connection con = null;
