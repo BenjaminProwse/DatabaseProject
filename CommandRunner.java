@@ -1307,13 +1307,6 @@ public class CommandRunner
             return line;
         }
     }
-    public static String showStock()
-    {
-        String line = "";
-        Connection con = null;
-        try
-        {
-            Class.forName("org.sqlite.JDBC");
 
     public static void addStaff(String name, String phone, double wage, String position, String startDate)
     {
@@ -1436,4 +1429,5 @@ public class CommandRunner
             return line;
         }
     }
+
 }

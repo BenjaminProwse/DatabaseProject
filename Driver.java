@@ -203,6 +203,22 @@ public class Driver
                                 else
                                     throw new InvalidAccessException("Invalid Access");
                             }
+                            
+                            else if (command.equals("!SHIPMENT_STAGE_UPDATE"))
+                            {
+                                if (Validator.validAccess(ID,"!SHIPMENT_STAGE_UPDATE") == true)
+                                    showShipmentStage();
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
+                            
+                            else if (command.equals("!SHIPMENT_STAGE_SHOW"))
+                            {
+                                if (Validator.validAccess(ID,"!SHIPMENT_STAGE_SHOW") == true)
+                                    updateShipmentStage();
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
 
                             else if (command.equals("!ADD_ORDER"))
                             {
@@ -368,7 +384,13 @@ public class Driver
         System.out.println("12. View contents of a particular invoice");
         System.out.println("-- Logistics Management:");
         System.out.println("13. View all active orders");
-        System.out.println("14. ");
+        System.out.println("14. View all orders");
+        System.out.println("15. View details on a specific order");
+        System.out.println("16. Cancel an active order");
+        System.out.println("17. Remove an order from the record");
+        System.out.println("18. View all shipments en route");
+        System.out.println("19. View details on a particular shipment");
+        System.out.println("20. Update a status of a shipment");
         System.out.println("0. Exit Menu");
         System.out.print(": ");
 
@@ -403,6 +425,112 @@ public class Driver
                     throw new InvalidAccessException("Invalid Access");
                 break;
             case 4:
+                if (Validator.validAccess(ID,"!SHOW_STOCK"))
+                    System.out.println(CommandRunner.showStock());
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 5:
+                System.out.println(CommandRunner.showFlavours());
+                break;
+            case 6:
+                if (Validator.validAccess(ID,"!ADD_FLAVOUR") == true)
+                {
+                    addFlavor();
+                    System.out.println("-> Flavour added");
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 7:
+                if (Validator.validAccess(ID,"!REMOVE_FLAVOUR") == true)
+                {
+                    removeFlavor();
+                    System.out.println("-> Flavour deleted");
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 8:
+                if (Validator.validAccess(ID,"!ADD_INVOICE") == true)
+                {
+                    addInvoice();
+                    System.out.println("-> Invoice added");
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 10:
+                if (Validator.validAccess(ID,"!SHOW_INVOICES") == true)
+                {
+                    System.out.println(CommandRunner.showInvoices());
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 11:
+                if (Validator.validAccess(ID,"!SHOW_INVOICES_BY_EMPLOYEE"))
+                {
+                    showInvoicesByEmployee();
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 12:
+                if (Validator.validAccess(ID,"!SHOW_INVOICE_CONTENTS"))
+                {
+                    showInvoiceContents();
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 13:
+                if (Validator.validAccess(ID,"!SHOW_ORDERS"))
+                    System.out.println(CommandRunner.showOrders());
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 14:
+                if (Validator.validAccess(ID,"!SHOW_ORDERS_ALL"))
+                    System.out.println(CommandRunner.showOrdersAll());
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 15:
+                if (Validator.validAccess(ID,"!SHOW_ORDER"))
+                {
+                    showOrder();
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 16:
+                if (Validator.validAccess(ID,"!CANCEL_ORDER") == true)
+                {
+                    cancelOrder();
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 17:
+                if (Validator.validAccess(ID,"!SHOW_SHIPMENTS") == true)
+                {
+                    System.out.println(CommandRunner.showShipments());
+                }
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 18:
+                if (Validator.validAccess(ID,"!SHOW_SHIPMENT") == true)
+                    showShipment();
+                else
+                    throw new InvalidAccessException("Invalid Access");
+                break;
+            case 19:
+                if (Validator.validAccess(ID,"!SHIPMENT_STAGE_UPDATE") == true)
+                    showShipmentStage();
+                else
+                    throw new InvalidAccessException("Invalid Access");
                 break;
             case 0:
                 menuMode = false;
@@ -672,8 +800,20 @@ public class Driver
     {
         Scanner input = new Scanner(System.in);
         System.out.println("--- Update Shipment Stage ---");
-        System.out.print("Shipment Number: ");
-        int id = input.nextInt();
+        int id = -1;
+        do
+        {
+            try
+            {
+                System.out.print("Shipment Number: ");
+                id = input.nextInt();
+            }
+            catch (Exception e)
+            {
+                System.out.println("Invalid input!");
+                id = -1;
+            }
+        } while (id == -1);
         System.out.print("Shipment Stage: ");
         String stage = input.nextLine();
 
@@ -684,6 +824,68 @@ public class Driver
             System.out.println("-> Stock Updated");
     }
 
+    public static String showShipmentStage(int trackingID)
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.println("--- Request Shipment Stage ---");
+        int id = -1;
+        do
+        {
+            try
+            {
+                System.out.print("Shipment Number: ");
+                id = input.nextInt();
+            }
+            catch (Exception e)
+            {
+                System.out.println("Invalid input!");
+                id = -1;
+            }
+        } while (id == -1);
+        
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = String.format("SELECT Status FROM Shipment WHERE Tracking_ID = %d;", trackingID);
+            ResultSet rs = stmt.executeQuery(command);
+
+            if (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("Tracking_ID"))
+                        + String.format(" | %s", rs.getString("Status"))
+                        + "\n";
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
+    
     private static void showShipment()
     {
         Scanner input = new Scanner(System.in);
