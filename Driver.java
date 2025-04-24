@@ -424,7 +424,7 @@ public class Driver
         String restrictions = input.nextLine();
         System.out.print("Calories: ");
         int calories = input.nextInt();
-        System.out.print("Price per Scope: ");
+        System.out.print("Calories per Scope: ");
         double pricePerScope = input.nextDouble();
 
         CommandRunner.addFlavor(name, restrictions, calories,pricePerScope);
