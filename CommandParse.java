@@ -77,8 +77,10 @@ public class CommandParse
             return true;
         else if (command.equals("!ERASE_SHIPMENT"))
             return true;
-
-
+        else if (command.equals("!SHOW_STOCK"))
+            return true;
+        else if (command.equals("!SHOW_STOCK_ALL"))
+            return true;
         else
             return false;
     }

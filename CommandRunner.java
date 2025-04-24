@@ -1219,5 +1219,91 @@ public class CommandRunner
             return line;
         }
     }
+    public static String showStock()
+    {
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
 
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = "SELECT * FROM Stock where amount > 0;";
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("Product_NO"))
+                        + String.format(" | %-5.2f", rs.getDouble("Amount"))
+                        + "\n";
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
+
+    public static String showStockAll()
+    {
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = "SELECT * FROM Stock;";
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("Product_NO"))
+                        + String.format(" | %-5.2f", rs.getDouble("Amount"))
+                        + "\n";
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
 }

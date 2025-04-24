@@ -268,6 +268,20 @@ public class Driver
                                     throw new InvalidAccessException("Invalid Access");
                             }
                         }
+                        else if (command.equals("!SHOW_STOCK"))
+                        {
+                            if (Validator.validAccess(ID,"!SHOW_STOCK"))
+                                System.out.println(CommandRunner.showStock());
+                            else
+                                throw new InvalidAccessException("Invalid Access");
+                        }
+                        else if (command.equals("!SHOW_STOCK_ALL"))
+                        {
+                            if (Validator.validAccess(ID,"!SHOW_STOCK_ALL"))
+                                System.out.println(CommandRunner.showStockAll());
+                            else
+                                throw new InvalidAccessException("Invalid Access");
+                        }
                         else
                         {
                             throw new InvalidAccessException("Invalid Access");
@@ -299,11 +313,25 @@ public class Driver
         Scanner input = new Scanner(System.in);
 
         System.out.println("--- Menu ---");
-        System.out.println("1. Create a new user");
-        System.out.println("2. Delete a user");
-        System.out.println("3. Show all users");
-        System.out.println("4. Show Stock");
-        System.out.println("5. Exit Menu");
+        System.out.println("-- User Management:");
+        System.out.println("1. Add a new user");
+        System.out.println("2. Remove a user");
+        System.out.println("3. List all users");
+        System.out.println("-- Stock Management:");
+        System.out.println("4. List stock");
+        System.out.println("5. List flavours");
+        System.out.println("6. Add a new flavour");
+        System.out.println("7. Remove a flavour");
+        System.out.println("-- Employee Performance Management:");
+        System.out.println("8. Log a new invoice");
+        System.out.println("9. Erase an invoice");
+        System.out.println("10. Browse all invoices");
+        System.out.println("11. View invoices logged by a specific employee");
+        System.out.println("12. View contents of a particular invoice");
+        System.out.println("-- Logistics Management:");
+        System.out.println("13. View all active orders");
+        System.out.println("14. ");
+        System.out.println("0. Exit Menu");
         System.out.print(": ");
 
         int response = input.nextInt();
@@ -338,7 +366,7 @@ public class Driver
                 break;
             case 4:
                 break;
-            case 5:
+            case 0:
                 menuMode = false;
                 break;
             default:
