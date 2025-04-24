@@ -378,19 +378,17 @@ public class Driver
         System.out.println("7. Remove a flavour");
         System.out.println("-- Employee Performance Management:");
         System.out.println("8. Log a new invoice");
-        System.out.println("9. Erase an invoice");
-        System.out.println("10. Browse all invoices");
-        System.out.println("11. View invoices logged by a specific employee");
-        System.out.println("12. View contents of a particular invoice");
+        System.out.println("9. Browse all invoices");
+        System.out.println("10. View invoices logged by a specific employee");
+        System.out.println("11. View contents of a particular invoice");
         System.out.println("-- Logistics Management:");
-        System.out.println("13. View all active orders");
-        System.out.println("14. View all orders");
-        System.out.println("15. View details on a specific order");
-        System.out.println("16. Cancel an active order");
-        System.out.println("17. Remove an order from the record");
-        System.out.println("18. View all shipments en route");
-        System.out.println("19. View details on a particular shipment");
-        System.out.println("20. Update a status of a shipment");
+        System.out.println("12. View all active orders");
+        System.out.println("13. View all orders");
+        System.out.println("14. View details on a specific order");
+        System.out.println("15. Cancel an active order");
+        System.out.println("16. View all shipments en route");
+        System.out.println("17. View details on a particular shipment");
+        System.out.println("18. Update a status of a shipment");
         System.out.println("0. Exit Menu");
         System.out.print(": ");
 
@@ -460,7 +458,7 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 10:
+            case 9:
                 if (Validator.validAccess(ID,"!SHOW_INVOICES") == true)
                 {
                     System.out.println(CommandRunner.showInvoices());
@@ -468,7 +466,7 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 11:
+            case 10:
                 if (Validator.validAccess(ID,"!SHOW_INVOICES_BY_EMPLOYEE"))
                 {
                     showInvoicesByEmployee();
@@ -476,7 +474,7 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 12:
+            case 11:
                 if (Validator.validAccess(ID,"!SHOW_INVOICE_CONTENTS"))
                 {
                     showInvoiceContents();
@@ -484,19 +482,19 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 13:
+            case 12:
                 if (Validator.validAccess(ID,"!SHOW_ORDERS"))
                     System.out.println(CommandRunner.showOrders());
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 14:
+            case 13:
                 if (Validator.validAccess(ID,"!SHOW_ORDERS_ALL"))
                     System.out.println(CommandRunner.showOrdersAll());
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 15:
+            case 14:
                 if (Validator.validAccess(ID,"!SHOW_ORDER"))
                 {
                     showOrder();
@@ -504,7 +502,7 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 16:
+            case 15:
                 if (Validator.validAccess(ID,"!CANCEL_ORDER") == true)
                 {
                     cancelOrder();
@@ -512,7 +510,7 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 17:
+            case 16:
                 if (Validator.validAccess(ID,"!SHOW_SHIPMENTS") == true)
                 {
                     System.out.println(CommandRunner.showShipments());
@@ -520,13 +518,13 @@ public class Driver
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 18:
+            case 17:
                 if (Validator.validAccess(ID,"!SHOW_SHIPMENT") == true)
                     showShipment();
                 else
                     throw new InvalidAccessException("Invalid Access");
                 break;
-            case 19:
+            case 18:
                 if (Validator.validAccess(ID,"!SHIPMENT_STAGE_UPDATE") == true)
                     showShipmentStage();
                 else
