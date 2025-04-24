@@ -267,6 +267,44 @@ public class Driver
                                 else
                                     throw new InvalidAccessException("Invalid Access");
                             }
+
+                            else if (command.equals("!SHOW_STOCK"))
+                            {
+                                if (Validator.validAccess(ID,"!SHOW_STOCK"))
+                                    System.out.println(CommandRunner.showStock());
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
+
+                            else if (command.equals("!SHOW_STOCK_ALL"))
+                            {
+                                if (Validator.validAccess(ID,"!SHOW_STOCK_ALL"))
+                                    System.out.println(CommandRunner.showStockAll());
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
+
+                            else if (command.equals("!ADD_STAFF"))
+                            {
+                                if (Validator.validAccess(ID,"!ADD_STAFF"))
+                                    addStaff();
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
+                            else if (command.equals("!REMOVE_STAFF"))
+                            {
+                                if (Validator.validAccess(ID,"!REMOVE_STAFF"))
+                                    removeStaff();
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
+                            else if (command.equals("!SHOW_STAFF"))
+                            {
+                                if (Validator.validAccess(ID,"!SHOW_STAFF"))
+                                    System.out.println(CommandRunner.showStaff());
+                                else
+                                    throw new InvalidAccessException("Invalid Access");
+                            }
                         }
                         else
                         {
@@ -424,7 +462,7 @@ public class Driver
         String restrictions = input.nextLine();
         System.out.print("Calories: ");
         int calories = input.nextInt();
-        System.out.print("Calories per Scope: ");
+        System.out.print("Price per Scope: ");
         double pricePerScope = input.nextDouble();
 
         CommandRunner.addFlavor(name, restrictions, calories,pricePerScope);
@@ -618,14 +656,6 @@ public class Driver
             System.out.println("-> Stock Updated");
     }
 
-    private static void showShipments(boolean isAll)
-    {
-        if (isAll)
-            CommandRunner.showShipments();
-        else
-            CommandRunner.showShipmentsAll();
-    }
-
     private static void showShipment()
     {
         Scanner input = new Scanner(System.in);
@@ -633,5 +663,36 @@ public class Driver
         System.out.print("Shipment ID: ");
         int id = input.nextInt();
         System.out.println(CommandRunner.showShipment(id));
+    }
+
+    private static void addStaff()
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.println("--- Add Staff ---");
+        System.out.print("Staff Name: ");
+        String name = input.nextLine();
+        System.out.print("Staff Phone: ");
+        String phone = input.nextLine();
+        System.out.print("Staff Wage: ");
+        double wage = input.nextDouble();
+        input.nextLine();
+        System.out.print("Staff Position: ");
+        String position = input.nextLine();
+        System.out.print("Staff Start Date: ");
+        String startDate = input.nextLine();
+
+        CommandRunner.addStaff(name, phone, wage, position, startDate);
+        System.out.println("-> Staff Added");
+    }
+
+    private static void removeStaff()
+    {
+        Scanner input = new Scanner(System.in);
+        System.out.println("--- Remove Staff ---");
+        System.out.print("Staff ID: ");
+        int id = input.nextInt();
+
+        CommandRunner.removeStaff(id);
+        System.out.println("-> Staff Removed");
     }
 }

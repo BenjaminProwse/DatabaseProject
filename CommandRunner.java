@@ -734,6 +734,94 @@ public class CommandRunner
         }
     }
 
+    public static String showStock()
+    {
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = "SELECT * FROM Stock where amount > 0;";
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("Product_NO"))
+                        + String.format(" | %-5.2f", rs.getDouble("Amount"))
+                        + "\n";
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
+
+    public static String showStockAll()
+    {
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = "SELECT * FROM Stock;";
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d", rs.getInt("Product_NO"))
+                        + String.format(" | %-5.2f", rs.getDouble("Amount"))
+                        + "\n";
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
+
     public static int makeOrder(int proNum, double amount)
     {
         Connection con = null;
@@ -1196,6 +1284,128 @@ public class CommandRunner
                         + String.format(" | %f", rs.getDouble("amount"))
                         + String.format(" | %s", rs.getString("status"))
                         + "\n";
+            }
+
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+                {
+                    con.close();
+                }
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            return line;
+        }
+    }
+
+    public static void addStaff(String name, String phone, double wage, String position, String startDate)
+    {
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            ResultSet rs = stmt.executeQuery("SELECT MAX(ID) FROM Staff;");
+            int id = 0;
+            if (rs.next())
+            {
+                id = rs.getInt(1) + 1;
+            }
+
+            String command = String.format("INSERT INTO Staff values ("+id+",'"+name+"','"+phone+"', "+wage+", '"+position+"', '"+startDate+"');");
+            stmt.executeUpdate(command);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+
+                    con.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static void removeStaff(int ID)
+    {
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = String.format("DELETE FROM Staff WHERE ID=%s;", ID);
+            stmt.executeUpdate(command);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try
+            {
+                if (con != null)
+
+                    con.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public static String showStaff()
+    {
+        String line = "";
+        Connection con = null;
+        try
+        {
+            Class.forName("org.sqlite.JDBC");
+
+            con = DriverManager.getConnection("jdbc:sqlite:IceCreamShop.db");
+
+            Statement stmt = con.createStatement();
+
+            String command = "SELECT * FROM Staff;";
+            ResultSet rs = stmt.executeQuery(command);
+
+            while (rs.next())
+            {
+                line = line
+                        + String.format("%07d",rs.getInt("ID"))
+                        + String.format(" | %-15s",rs.getString("Name"))
+                        + String.format(" | %-6s ", rs.getString("Phone"))
+                        + String.format(" | %4.2f", rs.getDouble("Wage"))
+                        + String.format(" | %-15s ", rs.getString("Position"))
+                        + String.format(" | %s",rs.getString("StartDate"))
+                        +"\n";
             }
 
         }
