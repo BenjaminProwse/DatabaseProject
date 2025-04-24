@@ -1,0 +1,12 @@
+User Guide:
+1. Boot the file with the dependencies given in the GitHub (These are the same as the ones given in lab)
+
+2. Login - Use the Username "BenPro" and Password "BenPass100"
+
+3. You will be met with a terminal. Ideally use "!HELP" or "!help"
+	This will show all commands and their Access level
+	Since you have logged in with a level 1 password all commands are available 
+
+4. If you wish to use a menu instead type "!MODE"
+
+5. Otherwise use the commands listed for however you wish
